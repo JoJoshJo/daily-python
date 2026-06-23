@@ -1,0 +1,1399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#15131E" />
+<meta name="description" content="Learn Python, one concept a day — with real code you run yourself." />
+<title>Python, one day at a time</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --bg:        #15131E;
+    --bg-soft:   #1E1B2E;
+    --bg-code:   #0E0D16;
+    --ink:       #ECEAF5;
+    --ink-dim:   #A29DB8;
+    --line:      rgba(255,255,255,0.08);
+    --accent:    #3DDC97;
+    --accent-ink:#08291C;
+    --flame:     #FFB020;
+    --error:     #FF7B72;
+
+    --r-card: 16px;
+    --r-btn:  12px;
+    --r-code: 14px;
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body:    "Inter", system-ui, -apple-system, sans-serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100dvh;
+  }
+
+  .wrap{
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 22px 20px calc(72px + env(safe-area-inset-bottom));
+  }
+
+  /* ---------- typography ---------- */
+  .display{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variation-settings: "opsz" 140;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .hero{ font-size: clamp(2rem, 7vw, 2.9rem); }
+  .sub{ color: var(--ink-dim); font-size: 1.02rem; margin: 14px 0 0; }
+
+  .prompt, .brandmark{
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  code{
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--bg-code);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1px 6px;
+    color: var(--ink);
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: var(--r-btn);
+    min-height: 48px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: transform .12s ease, background .15s ease, border-color .15s ease, opacity .15s ease;
+  }
+  .btn:active{ transform: translateY(1px); }
+  .btn-accent{
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .btn-accent:hover{ background: #4ee9a6; }
+  .btn-accent:disabled{
+    background: var(--bg-soft);
+    color: var(--ink-dim);
+    border-color: var(--line);
+    cursor: not-allowed;
+    opacity: .8;
+  }
+  .btn-ghost{
+    background: transparent;
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .btn-ghost:hover{ border-color: var(--accent); color: var(--accent); }
+
+  .iconbtn{
+    background: var(--bg-soft);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    width: 44px; height: 44px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .iconbtn:hover{ border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- focus ---------- */
+  :focus{ outline: none; }
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  h1:focus-visible{ outline: none; }
+
+  /* ---------- screen transition ---------- */
+  .screen{ animation: screenIn 220ms ease both; }
+  @keyframes screenIn{
+    from{ opacity: 0; transform: translateY(6px); }
+    to{ opacity: 1; transform: none; }
+  }
+
+  /* ---------- welcome ---------- */
+  .brand-only{ margin-bottom: 40px; }
+  .brandmark{ font-size: 1.4rem; letter-spacing: 1px; }
+  .welcome{ margin-top: 6vh; }
+  .name-form{ margin-top: 30px; display: grid; gap: 12px; }
+  .field-label{ color: var(--ink-dim); font-weight: 500; font-size: .95rem; }
+  .text-input{
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--r-btn);
+    padding: 14px 16px;
+    min-height: 48px;
+  }
+  .text-input::placeholder{ color: var(--ink-dim); opacity: .7; }
+  .text-input:focus-visible{ border-color: var(--accent); }
+  .name-form .btn{ margin-top: 4px; }
+
+  /* ---------- home ---------- */
+  .home-head{
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .head-right{ display: flex; align-items: center; gap: 12px; }
+  .streak{ display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+  .flame{ font-size: 1.05rem; }
+  .streak-num{ font-variant-numeric: tabular-nums; }
+  .dayof{ color: var(--ink-dim); font-size: .9rem; }
+
+  .greeting{
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+  .greeting .prompt{ margin-right: 8px; }
+
+  .banner{
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+    font-size: .95rem;
+  }
+
+  .cards{ display: grid; gap: 14px; }
+  .choice-card{
+    text-align: left;
+    width: 100%;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    padding: 18px 18px 20px;
+    cursor: pointer;
+    display: grid;
+    gap: 6px;
+    transition: transform .14s ease, border-color .15s ease, background .15s ease;
+    color: var(--ink);
+    font-family: var(--font-body);
+  }
+  .choice-card:hover{ transform: translateY(-2px); border-color: rgba(61,220,151,.4); }
+  .choice-card.today{ border-color: rgba(61,220,151,.35); }
+  .choice-card.disabled{
+    cursor: not-allowed;
+    opacity: .6;
+  }
+  .choice-card.disabled:hover{ transform: none; border-color: var(--line); }
+  .card-kicker{
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--accent);
+  }
+  .choice-card.warm .card-kicker{ color: var(--ink-dim); }
+  .card-title{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.18rem;
+    font-variation-settings: "opsz" 90;
+    line-height: 1.2;
+  }
+  .card-go{ color: var(--accent); font-size: .9rem; font-weight: 600; margin-top: 2px; }
+
+  .celebrate{ text-align: center; padding: 18px 0 8px; }
+  .celebrate-h{ font-size: clamp(1.7rem, 6vw, 2.3rem); }
+
+  /* ---------- journey strip ---------- */
+  .journey{ margin-top: 28px; }
+  .dots{
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 9px;
+    max-width: 320px;
+  }
+  .dot{
+    width: 100%;
+    aspect-ratio: 1;
+    min-width: 18px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid var(--line);
+    padding: 0;
+    cursor: default;
+  }
+  .dot.done{ background: var(--accent); border-color: var(--accent); }
+  .dot.today{ border-color: var(--accent); box-shadow: 0 0 0 3px rgba(61,220,151,.16); }
+  .dot[data-day]{ cursor: pointer; }
+  .dot[data-day]:hover{ transform: scale(1.18); }
+  .dot.just{ animation: pop .55s ease; }
+  @keyframes pop{
+    0%{ transform: scale(.5); } 55%{ transform: scale(1.3); } 100%{ transform: scale(1); }
+  }
+  .journey-meta{ color: var(--ink-dim); font-size: .9rem; margin-top: 14px; font-family: var(--font-mono); }
+  .bump{ display: inline-block; animation: bump .5s ease; }
+  @keyframes bump{ 0%,100%{ transform: scale(1);} 40%{ transform: scale(1.4); color: var(--flame);} }
+
+  /* ---------- lesson ---------- */
+  .bar{ margin-bottom: 18px; }
+  .eyebrow{
+    font-family: var(--font-mono);
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: .72rem;
+    margin: 0 0 8px;
+  }
+  .lesson-title{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-variation-settings: "opsz" 120;
+    font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+    line-height: 1.12;
+    margin: 0 0 18px;
+  }
+  .idea{ font-size: 1.05rem; color: #DCD8EC; }
+  .section-h{
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--ink-dim);
+    margin: 26px 0 10px;
+  }
+  .example, .practice{ margin-top: 4px; }
+  .note{ color: var(--ink-dim); font-size: .9rem; margin: 8px 0 0; }
+  .q, .prompt-text{ font-size: 1.02rem; margin: 4px 0 14px; }
+
+  /* code + terminal */
+  pre.code{
+    font-family: var(--font-mono);
+    font-size: .92rem;
+    line-height: 1.6;
+    background: var(--bg-code);
+    border: 1px solid var(--line);
+    border-radius: var(--r-code);
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 0;
+    white-space: pre;
+  }
+  .tok-kw{ color: #C9A4FF; }
+  .tok-fn{ color: var(--accent); }
+  .tok-str{ color: #FFD9A0; }
+  .tok-num{ color: #87C3FF; }
+  .tok-com{ color: var(--ink-dim); font-style: italic; }
+
+  .editor-wrap{ position: relative; }
+  textarea.editor{
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: .95rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--bg-code);
+    border: 1px solid var(--line);
+    border-radius: var(--r-code);
+    padding: 14px 16px;
+    resize: none;
+    min-height: 72px;
+    overflow: hidden;
+    tab-size: 4;
+  }
+  textarea.editor:focus-visible{ border-color: var(--accent); outline-offset: 0; }
+
+  .run-row{ display: flex; align-items: center; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
+  .run-row .btn{ min-height: 44px; }
+  .status{ color: var(--ink-dim); font-size: .85rem; font-family: var(--font-mono); }
+
+  .term{
+    font-family: var(--font-mono);
+    font-size: .9rem;
+    line-height: 1.5;
+    background: var(--bg-code);
+    border: 1px solid var(--line);
+    border-radius: var(--r-code);
+    padding: 12px 14px;
+    min-height: 48px;
+    max-height: 280px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .term:empty::before{ content: "Output appears here after you press Run."; color: var(--ink-dim); opacity: .6; }
+  .term-line{ animation: lineIn .25s ease both; }
+  .term-line.is-err{ color: var(--error); }
+  .term-line.is-note{ color: var(--flame); }
+  @keyframes lineIn{ from{ opacity: 0; transform: translateY(2px);} to{ opacity: 1; transform: none;} }
+
+  /* predict options */
+  .options{ display: grid; gap: 10px; margin-bottom: 8px; }
+  .opt{
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: .95rem;
+    white-space: pre-line;
+    color: var(--ink);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 16px;
+    min-height: 44px;
+    cursor: pointer;
+    transition: border-color .14s ease, background .14s ease;
+  }
+  .opt:hover:not(:disabled){ border-color: var(--accent); }
+  .opt:disabled{ cursor: default; }
+  .opt-correct{ border-color: var(--accent); background: rgba(61,220,151,.12); color: var(--accent); }
+  .opt-wrong{ border-color: var(--error); background: rgba(255,123,114,.1); color: var(--error); }
+  .explain{
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--ink-dim);
+    margin: 4px 0 12px;
+    font-size: .95rem;
+  }
+  .explain strong{ color: var(--accent); }
+  .continue{ margin-top: 4px; }
+
+  .success{
+    display: flex; align-items: center; gap: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 14px;
+  }
+
+  .review-card{
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+  .review-text{ font-size: 1.05rem; margin: 0 0 14px; }
+  .review-card .section-h{ margin-top: 0; }
+
+  .lesson-footer{ margin-top: 30px; }
+  .lesson-footer .btn{ width: 100%; }
+
+  /* svg check */
+  .checkpath{
+    stroke-dasharray: 48;
+    stroke-dashoffset: 48;
+    animation: draw .5s .12s ease forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+
+  /* completion splash */
+  .splash{
+    position: fixed; inset: 0;
+    background: rgba(21,19,30,.92);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 50;
+    animation: screenIn .2s ease both;
+  }
+  .splash-inner{ text-align: center; }
+  .splash-inner p{ font-family: var(--font-display); font-weight: 600; font-size: 1.3rem; margin: 14px 0 0; }
+
+  /* footer / reset */
+  .appfooter{ margin-top: 44px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .reset-link{
+    background: none; border: none;
+    color: var(--ink-dim);
+    font-family: var(--font-body);
+    font-size: .85rem;
+    cursor: pointer;
+    padding: 6px 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .reset-link:hover{ color: var(--error); }
+
+  /* flame ambient flicker */
+  .flame{ animation: flicker 2.6s ease-in-out infinite; transform-origin: center; }
+  @keyframes flicker{
+    0%,100%{ opacity: 1; transform: scale(1); }
+    45%{ opacity: .82; transform: scale(1.07); }
+    70%{ opacity: .95; transform: scale(.98); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    .checkpath{ stroke-dashoffset: 0; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap" id="app" aria-live="polite"></main>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.29.4/full/pyodide.js"></script>
+  <script>
+  (function(){
+    "use strict";
+
+    /* ===================== lesson data ===================== */
+    const LESSONS = [
+      {
+        day: 1, emoji: "👋", title: "Saying hello with print()",
+        idea: "Every program starts by telling the computer to do something. `print()` shows text on the screen — whatever you put inside the quotes, Python shows back to you. Think of it as Python repeating after you.",
+        example: { code: `print("Hello, world!")`, note: "Press Run to see what happens.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make Python introduce you. Put your own name inside the quotes.",
+          starter: `print("Hi, I'm ___")`,
+          check: { producedOutput: true, noPlaceholder: true },
+          hint: "Replace the ___ (keep the quotes) with your name, then press Run."
+        }},
+        review: "print() shows text on screen. The text goes inside quotes."
+      },
+      {
+        day: 2, emoji: "💬", title: "Printing more than one line",
+        idea: "You can print as many lines as you like. Python runs your code top to bottom, one line at a time, and each `print()` starts a new line.",
+        example: { code: `print("Line one")\nprint("Line two")`, note: "Two prints, two lines.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Print three things about yourself — one per line (your name, your city, your favourite food).",
+          starter: `print("My name is ___")\nprint("I live in ___")\nprint("I love ___")`,
+          check: { minLines: 3 },
+          hint: "Add a print() line for each thing. Three print lines make three lines of output."
+        }},
+        review: "Code runs top to bottom. Each print() is a new line."
+      },
+      {
+        day: 3, emoji: "📦", title: "Variables: naming a value",
+        idea: "A variable is a labelled box that holds a value so you can use it later by name. `name = \"Sam\"` puts the text Sam into a box called name. After that, name means \"Sam\".",
+        example: { code: `name = "Sam"\nprint(name)`, note: "Store it, then print it.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make a variable called city holding your city, then print it.",
+          starter: `city = "___"\nprint(city)`,
+          check: { producedOutput: true, noPlaceholder: true },
+          hint: "Put your city in the quotes; keep print(city) as it is."
+        }},
+        review: "A variable is a named box. name = value stores it; use the name to get it back."
+      },
+      {
+        day: 4, emoji: "✏️", title: "Changing a variable",
+        idea: "A variable can change. Whatever you store last is what it holds — like erasing the box and putting something new in.",
+        example: { code: `score = 0\nscore = 10\nprint(score)`, note: "The second value replaces the first.", runnable: true },
+        practice: { type: "both",
+          predict: {
+            code: `mood = "tired"\nmood = "happy"\nprint(mood)`,
+            question: "What does this print?",
+            options: ["tired", "happy", "tired happy", "Error"],
+            answer: "happy",
+            explain: "The last value you store wins, so mood is \"happy\" by the time it prints."
+          },
+          run: {
+            prompt: "Now try it yourself: make mood \"tired\", then change it to \"happy\", then print it.",
+            starter: `mood = "tired"\nmood = "happy"\nprint(mood)`,
+            check: { contains: ["happy"] },
+            hint: "Store \"tired\" first, then \"happy\", then print(mood)."
+          }
+        },
+        review: "Re-assigning replaces the value. The last assignment is what's stored."
+      },
+      {
+        day: 5, emoji: "🔤", title: "Text (strings)",
+        idea: "Text in Python is called a string — characters inside quotes, like \"hello\". The quotes tell Python \"this is text, not a command\".",
+        example: { code: `greeting = "Good morning!"\nprint(greeting)`, note: "A whole sentence is fine.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Store your favourite saying in a variable called saying, and print it.",
+          starter: `saying = "___"\nprint(saying)`,
+          check: { producedOutput: true, noPlaceholder: true },
+          hint: "Anything inside the quotes works — a full sentence too."
+        }},
+        review: "A string is text inside quotes. Quotes mark where the text starts and ends."
+      },
+      {
+        day: 6, emoji: "🔢", title: "Numbers",
+        idea: "Python knows numbers too, and numbers need no quotes. Whole numbers like 7 are ints; numbers with a dot like 3.5 are floats. You can do math with `+ - * /`.",
+        example: { code: `print(2 + 3)\nprint(10 / 4)`, note: "Let Python do the math.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Print the answer to 15 times 8 — let Python calculate it, don't type the answer.",
+          starter: `print(15 * 8)`,
+          check: { contains: ["120"] },
+          hint: "Use * to multiply: print(15 * 8)."
+        }},
+        review: "Numbers need no quotes. Use + - * / for math. Whole = int, decimal = float."
+      },
+      {
+        day: 7, emoji: "🧮", title: "Math with variables",
+        idea: "Variables that hold numbers can be used in math, just like the numbers themselves. This is how programs calculate things.",
+        example: { code: `price = 5\nquantity = 3\ntotal = price * quantity\nprint(total)`, note: "Store the result, then use it.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "You buy 4 items at 12 each. Use variables to calculate and print the total.",
+          starter: `items = 4\ncost = 12\ntotal = ___\nprint(total)`,
+          check: { contains: ["48"] },
+          hint: "total = items * cost, then print(total)."
+        }},
+        review: "Number variables work in math. Store the result in a new variable, then use it."
+      },
+      {
+        day: 8, emoji: "🔗", title: "Joining text together",
+        idea: "Stick strings together with `+`. This is called joining. \"Hello, \" + \"Sam\" becomes \"Hello, Sam\".",
+        example: { code: `first = "Ada"\nprint("Hello, " + first)`, note: "Mind the space after the comma.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make a variable name with your name, then print \"Welcome, \" joined with your name.",
+          starter: `name = "___"\nprint("Welcome, " + name)`,
+          check: { contains: ["welcome"], noPlaceholder: true },
+          hint: "Use + to join: \"Welcome, \" + name. Keep the space after the comma."
+        }},
+        review: "+ joins strings. Numbers add, but strings glue together."
+      },
+      {
+        day: 9, emoji: "✨", title: "f-strings (text + values, the easy way)",
+        idea: "Put an `f` before the quotes and you can drop variables right inside the text using {curly braces}. Much easier than +. `f\"Hi {name}\"` fills in the name automatically.",
+        example: { code: `name = "Lee"\nage = 20\nprint(f"{name} is {age}")`, note: "Braces get replaced by the values.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Use an f-string to print \"I am [your name] and I love [something]\" with two variables filled in.",
+          starter: `name = "___"\nlikes = "___"\nprint(f"I am {name} and I love {likes}")`,
+          check: { producedOutput: true, noPlaceholder: true },
+          hint: "Keep the f before the quotes, and put variable names inside {curly braces}."
+        }},
+        review: "f\"...\" lets you put {variables} inside text. Cleaner than joining with +."
+      },
+      {
+        day: 10, emoji: "⌨️", title: "Asking the user a question",
+        idea: "`input()` pauses and waits for the person to type something, then hands you what they typed (always as text).",
+        example: { code: `name = input("What's your name? ")\nprint(f"Hi {name}!")`, note: "A box will pop up — type and press OK.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Ask the user for their favourite colour, then print \"Nice, [colour] is a great colour!\"",
+          starter: `colour = input("Favourite colour? ")\nprint(f"Nice, {colour} is a great colour!")`,
+          check: { producedOutput: true },
+          hint: "Use input(\"...\") to ask, then an f-string to reply. Type an answer in the popup."
+        }},
+        review: "input() waits for the user to type, and gives you their text."
+      },
+      {
+        day: 11, emoji: "🔁", title: "Turning input into numbers",
+        idea: "`input()` always gives text — even if the person types 5, you get the string \"5\", which you can't do math with. Wrap it in `int()` to turn it into a real number.",
+        example: { code: `age = int(input("Your age? "))\nprint(f"Next year you'll be {age + 1}")`, note: "int() makes it a number.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Ask for a number, then print that number doubled.",
+          starter: `n = int(input("Pick a number: "))\nprint(n * 2)`,
+          check: { producedOutput: true, containsDigit: true },
+          hint: "Wrap input in int(): int(input(...)). Then print(n * 2)."
+        }},
+        review: "input() gives text. int(...) turns \"5\" into 5 so you can do math."
+      },
+      {
+        day: 12, emoji: "✅", title: "True and False (booleans)",
+        idea: "Some values are just yes or no — Python calls them `True` and `False` (capital first letter, no quotes). They're the foundation of decisions.",
+        example: { code: `is_raining = True\nprint(is_raining)`, note: "No quotes around True.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make a variable is_weekend, set it to True, then print it.",
+          starter: `is_weekend = True\nprint(is_weekend)`,
+          check: { contains: ["true"] },
+          hint: "True has a capital T and no quotes."
+        }},
+        review: "True / False are booleans — yes/no values. No quotes, capital first letter."
+      },
+      {
+        day: 13, emoji: "⚖️", title: "Comparing things",
+        idea: "Python can compare values and answer with True/False. `==` means equal to (two equals!), and you also have `>`, `<`, `>=`, `<=`, `!=` (not equal).",
+        example: null,
+        practice: { type: "predict", predict: {
+          code: `print(7 > 12)\nprint(4 == 4)`,
+          question: "What does this print?",
+          options: ["False\nTrue", "True\nFalse", "True\nTrue", "False\nFalse"],
+          answer: "False\nTrue",
+          explain: "7 is not greater than 12 → False. 4 equals 4 → True."
+        }},
+        review: "Comparisons give True/False. == is equal (two!), != is not equal."
+      },
+      {
+        day: 14, emoji: "🔀", title: "Making decisions with if",
+        idea: "`if` lets your program choose. If the condition is True, the indented code under it runs; if not, it's skipped. The indent (spaces) is how Python knows what's inside the if.",
+        example: { code: `age = 20\nif age >= 18:\n    print("You're an adult")`, note: "Note the colon and the indent.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Set temperature = 35. If it's greater than 30, print \"It's hot!\"",
+          starter: `temperature = 35\nif temperature > 30:\n    print("It's hot!")`,
+          check: { contains: ["hot"] },
+          hint: "End the if line with a colon, and indent the print under it (4 spaces)."
+        }},
+        review: "if condition: runs the indented block only when the condition is True. Indentation matters."
+      },
+      {
+        day: 15, emoji: "🔂", title: "if / else",
+        idea: "`else` is the \"otherwise\" partner of `if`. If the condition is False, the else block runs instead. One branch or the other always runs.",
+        example: { code: `age = 12\nif age >= 18:\n    print("Adult")\nelse:\n    print("Not yet")`, note: "else has no condition.", runnable: true },
+        practice: { type: "both",
+          predict: {
+            code: `score = 40\nif score >= 50:\n    print("Pass")\nelse:\n    print("Try again")`,
+            question: "What does this print?",
+            options: ["Pass", "Try again", "Both", "Nothing"],
+            answer: "Try again",
+            explain: "40 is not >= 50, so the if is False and the else runs."
+          },
+          run: {
+            prompt: "Now write it: set score = 40. If score >= 50 print \"Pass\", otherwise print \"Try again\".",
+            starter: `score = 40\nif score >= 50:\n    print("Pass")\nelse:\n    print("Try again")`,
+            check: { contains: ["try again"] },
+            hint: "else: has no condition. Indent its print the same as the if's print."
+          }
+        },
+        review: "else runs when the if is False. Exactly one branch runs."
+      },
+      {
+        day: 16, emoji: "🪜", title: "elif (more than two choices)",
+        idea: "`elif` (\"else if\") checks another condition when the first was False. You can chain several. Python tries them top to bottom and runs the first True one.",
+        example: null,
+        practice: { type: "predict", predict: {
+          code: `light = "yellow"\nif light == "red":\n    print("Stop")\nelif light == "green":\n    print("Go")\nelse:\n    print("Slow down")`,
+          question: "What does this print?",
+          options: ["Stop", "Go", "Slow down", "Nothing"],
+          answer: "Slow down",
+          explain: "light isn't \"red\" or \"green\", so both checks fail and the else runs."
+        }},
+        review: "elif adds more conditions between if and else. The first True one wins."
+      },
+      {
+        day: 17, emoji: "🔗", title: "and / or / not",
+        idea: "Combine conditions: `and` needs both to be True; `or` needs at least one; `not` flips True/False. Just like everyday logic: \"sunny and warm\".",
+        example: null,
+        practice: { type: "predict", predict: {
+          code: `temp = 22\nif temp > 15 and temp < 30:\n    print("Nice day")`,
+          question: "What does this print?",
+          options: ["Nice day", "Nothing", "True", "Error"],
+          answer: "Nice day",
+          explain: "Both parts are True (22 is above 15 and below 30), so 'and' is True and it prints."
+        }},
+        review: "and = both true, or = at least one true, not = flip it."
+      },
+      {
+        day: 18, emoji: "📋", title: "Lists (a collection)",
+        idea: "A list holds many values in order, inside square brackets, separated by commas — like a shopping list stored in one variable.",
+        example: { code: `fruits = ["apple", "banana", "cherry"]\nprint(fruits)`, note: "One variable, many values.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make a list called hobbies with three of your hobbies, and print it.",
+          starter: `hobbies = ["___", "___", "___"]\nprint(hobbies)`,
+          check: { contains: ["["], noPlaceholder: true },
+          hint: "Put each item in quotes, separated by commas, inside [ ]."
+        }},
+        review: "A list = [ ] holds many values in order, separated by commas."
+      },
+      {
+        day: 19, emoji: "🔢", title: "Getting items out of a list",
+        idea: "Each item has a position number called an index, and Python starts counting at 0. So `list[0]` is the first item, `list[1]` the second.",
+        example: { code: `colors = ["red", "green", "blue"]\nprint(colors[0])\nprint(colors[2])`, note: "Counting starts at 0.", runnable: true },
+        practice: { type: "both",
+          predict: {
+            code: `colors = ["red", "green", "blue"]\nprint(colors[0])`,
+            question: "What does this print?",
+            options: ["red", "green", "blue", "0"],
+            answer: "red",
+            explain: "Index 0 is the first item, which is \"red\"."
+          },
+          run: {
+            prompt: "Make a list of three animals and print only the second one.",
+            starter: `animals = ["cat", "dog", "fox"]\nprint(animals[___])`,
+            check: { producedOutput: true, noPlaceholder: true },
+            hint: "Counting starts at 0, so the second item is index 1: animals[1]."
+          }
+        },
+        review: "Items have positions starting at 0. list[0] is first, list[1] is second."
+      },
+      {
+        day: 20, emoji: "➕", title: "Adding to a list",
+        idea: "`.append()` adds an item to the end of a list. Lists can grow and shrink while your program runs.",
+        example: { code: `tasks = ["wash", "cook"]\ntasks.append("clean")\nprint(tasks)`, note: "\"clean\" gets added to the end.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Start with shopping = [\"milk\", \"eggs\"], append \"bread\", then print the list.",
+          starter: `shopping = ["milk", "eggs"]\nshopping.append("bread")\nprint(shopping)`,
+          check: { contains: ["bread"] },
+          hint: ".append(\"bread\") adds it to the end, then print the list."
+        }},
+        review: ".append() adds an item to the end of a list. Lists can change."
+      },
+      {
+        day: 21, emoji: "📏", title: "How many? len()",
+        idea: "`len()` tells you how many items are in a list (or how many characters in a string). Handy for counting.",
+        example: { code: `names = ["Sam", "Lee", "Kai"]\nprint(len(names))`, note: "Three items → 3.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make a list of your favourite movies and print how many you listed.",
+          starter: `movies = ["___", "___"]\nprint(len(movies))`,
+          check: { containsDigit: true, noPlaceholder: true },
+          hint: "len(movies) gives the count. Add as many movies as you like."
+        }},
+        review: "len(x) counts items in a list (or characters in a string)."
+      },
+      {
+        day: 22, emoji: "🔁", title: "Looping through a list (for)",
+        idea: "A `for` loop repeats code once for each item in a list, handing you one item at a time. No more copy-pasting print() for every item.",
+        example: { code: `for fruit in ["apple", "banana"]:\n    print(fruit)`, note: "The body runs once per item.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Loop through a list of three friends and print \"Hi\" and each name.",
+          starter: `friends = ["Ana", "Ben", "Cy"]\nfor name in friends:\n    print(f"Hi {name}")`,
+          check: { minLines: 3 },
+          hint: "Indent the print inside the loop; it runs once per name."
+        }},
+        review: "for item in list: runs the indented block once for each item."
+      },
+      {
+        day: 23, emoji: "#️⃣", title: "Counting with range()",
+        idea: "`range(n)` gives the numbers 0 up to (but not including) n. Great for repeating something a set number of times.",
+        example: { code: `for i in range(3):\n    print(i)`, note: "0, 1, 2 — not 3.", runnable: true },
+        practice: { type: "both",
+          predict: {
+            code: `for i in range(3):\n    print(i)`,
+            question: "What does this print?",
+            options: ["0, 1, 2 (each on its own line)", "1, 2, 3", "0, 1, 2, 3", "3"],
+            answer: "0, 1, 2 (each on its own line)",
+            explain: "range(3) gives 0, 1, 2 — it starts at 0 and stops before 3."
+          },
+          run: {
+            prompt: "Use range to print \"Hello\" five times.",
+            starter: `for i in range(5):\n    print("Hello")`,
+            check: { minLines: 5 },
+            hint: "range(5) loops 5 times. Print \"Hello\" inside the loop."
+          }
+        },
+        review: "range(n) counts 0 to n-1. Use it to repeat a set number of times."
+      },
+      {
+        day: 24, emoji: "🔄", title: "while loops",
+        idea: "A `while` loop keeps repeating as long as its condition stays True — useful when you don't know how many times in advance. Make sure something changes, or it never stops.",
+        example: { code: `count = 1\nwhile count <= 3:\n    print(count)\n    count = count + 1`, note: "count grows until the condition fails.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Print the numbers 1 to 5 using a while loop.",
+          starter: `n = 1\nwhile n <= 5:\n    print(n)\n    n = n + 1`,
+          check: { contains: ["5"] },
+          hint: "Increase n each time (n = n + 1) so the loop eventually stops."
+        }},
+        review: "while condition: repeats while it's True. Change something inside or it loops forever."
+      },
+      {
+        day: 25, emoji: "🛑", title: "break (stopping a loop early)",
+        idea: "Inside a loop, `break` stops it completely. (Its partner `continue` skips to the next round.) They give you fine control over loops.",
+        example: null,
+        practice: { type: "predict", predict: {
+          code: `for n in range(10):\n    if n == 5:\n        break\n    print(n)`,
+          question: "What's the LAST number printed?",
+          options: ["4", "5", "9", "10"],
+          answer: "4",
+          explain: "When n becomes 5, break stops the loop before printing, so 4 is the last number shown."
+        }},
+        review: "break stops a loop; continue skips to the next iteration."
+      },
+      {
+        day: 26, emoji: "🛠️", title: "Functions: your own command",
+        idea: "A function is a reusable chunk of code with a name. You define it once with `def`, then call it by name whenever you need it — like saving a recipe to reuse.",
+        example: { code: `def greet():\n    print("Hello!")\n\ngreet()`, note: "Define, then call it.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Define a function called cheer that prints \"Go team!\", then call it.",
+          starter: `def cheer():\n    print("Go team!")\n\ncheer()`,
+          check: { contains: ["go team"] },
+          hint: "Define with def cheer():, indent the print, then call it on a new line: cheer()."
+        }},
+        review: "def name(): defines a function. Call it with name() to run it."
+      },
+      {
+        day: 27, emoji: "🎁", title: "Functions with inputs (parameters)",
+        idea: "Functions can take inputs, called parameters, so they work with different values each time. `def greet(name)` lets you greet anyone.",
+        example: { code: `def greet(name):\n    print(f"Hi {name}!")\n\ngreet("Sam")\ngreet("Lee")`, note: "Same function, different values.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Write a function welcome(place) that prints \"Welcome to [place]\", and call it with your city.",
+          starter: `def welcome(place):\n    print(f"Welcome to {place}")\n\nwelcome("___")`,
+          check: { contains: ["welcome to"], noPlaceholder: true },
+          hint: "Put place in the (parentheses), use it inside, then call welcome(\"YourCity\")."
+        }},
+        review: "Parameters let a function work with different values: def f(x): ... then f(5)."
+      },
+      {
+        day: 28, emoji: "↩️", title: "Functions that give back a value",
+        idea: "`return` sends a value back out of a function so you can use the result. Unlike print (which only shows it), return hands it to you to store or reuse.",
+        example: { code: `def add(a, b):\n    return a + b\n\nresult = add(2, 3)\nprint(result)`, note: "return gives the answer back.", runnable: true },
+        practice: { type: "both",
+          predict: {
+            code: `def double(n):\n    return n * 2\n\nprint(double(8))`,
+            question: "What does this print?",
+            options: ["16", "8", "double(8)", "Error"],
+            answer: "16",
+            explain: "double(8) returns 8 * 2 = 16, and print shows it."
+          },
+          run: {
+            prompt: "Write a function double(n) that returns n times 2, then print double(8).",
+            starter: `def double(n):\n    return ___\n\nprint(double(8))`,
+            check: { contains: ["16"] },
+            hint: "return n * 2. Then double(8) gives 16, which print shows."
+          }
+        },
+        review: "return hands a value back. Store it (x = f()) or print it."
+      },
+      {
+        day: 29, emoji: "📒", title: "Dictionaries (labels and values)",
+        idea: "A dictionary stores pairs: a key (a label) and its value. You look things up by name instead of by position — like a real dictionary: word → meaning.",
+        example: { code: `person = {"name": "Ada", "age": 30}\nprint(person["name"])`, note: "Look up by key.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Make a dictionary car with keys \"brand\" and \"year\", then print the brand.",
+          starter: `car = {"brand": "___", "year": ___}\nprint(car["brand"])`,
+          check: { producedOutput: true, noPlaceholder: true },
+          hint: "Use { \"key\": value }. Look up with car[\"brand\"]."
+        }},
+        review: "A dict = { key: value } pairs. Get a value with dict[\"key\"]."
+      },
+      {
+        day: 30, emoji: "🚀", title: "Your first mini program",
+        idea: "Time to combine everything — variables, input, f-strings and a decision make a real program. You've learned the building blocks; here they work together.",
+        example: { code: `name = input("Your name? ")\nage = int(input("Your age? "))\nif age >= 18:\n    print(f"{name}, you can vote!")\nelse:\n    print(f"{name}, {18 - age} years to go.")`, note: "Everything so far, working together.", runnable: true },
+        practice: { type: "run", run: {
+          prompt: "Build a tiny program: ask for a name and one more thing, then print a friendly message using both. Make it yours — there's no wrong answer here.",
+          starter: `name = input("Your name? ")\nfav = input("Favourite thing? ")\nprint(f"Nice to meet you {name}! {fav} is awesome.")`,
+          check: { producedOutput: true },
+          hint: "Use input() to ask, and an f-string to build your message."
+        }},
+        review: "Real programs combine variables, input, decisions and functions. You can build them now."
+      }
+    ];
+
+    /* ===================== state & storage ===================== */
+    const STORE_KEY = "pyjourney_v1";
+    let memFallback = null;       // in-memory fallback if localStorage is unavailable
+    let state = null;
+    let pendingComplete = null;   // day whose dot should animate on next Home render
+
+    function readState(){
+      try{
+        const raw = localStorage.getItem(STORE_KEY);
+        if(raw) return JSON.parse(raw);
+        return null;
+      }catch(e){
+        return memFallback;
+      }
+    }
+    function writeState(){
+      try{
+        localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      }catch(e){
+        memFallback = state;
+      }
+    }
+    function clearState(){
+      try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+      memFallback = null;
+    }
+
+    /* local-date helpers (YYYY-MM-DD) */
+    function fmtDate(d){
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      return y+"-"+m+"-"+day;
+    }
+    function todayStr(){ return fmtDate(new Date()); }
+    function yesterdayStr(){ const d = new Date(); d.setDate(d.getDate()-1); return fmtDate(d); }
+
+    /* derived */
+    function todayDay(){
+      for(let d=1; d<=30; d++){ if(state.completed.indexOf(d) === -1) return d; }
+      return null;
+    }
+    function prevDay(){
+      return state.completed.length ? Math.max.apply(null, state.completed) : null;
+    }
+
+    function completeDay(day){
+      if(state.completed.indexOf(day) !== -1) return; // already done — no streak change
+      state.completed.push(day);
+      if(state.lastDate === todayStr()){
+        /* already counted today — leave streak unchanged */
+      }else if(state.lastDate === yesterdayStr()){
+        state.streak += 1;
+      }else{
+        state.streak = 1;
+      }
+      state.lastDate = todayStr();
+      writeState();
+    }
+
+    /* ===================== pyodide ===================== */
+    const PYODIDE_VERSION = "0.29.4";
+    const PYODIDE_URL = "https://cdn.jsdelivr.net/pyodide/v" + PYODIDE_VERSION + "/full/";
+    let pyodide = null, pyodideLoading = null;
+
+    async function getPyodide(){
+      if(pyodide) return pyodide;
+      if(pyodideLoading) return pyodideLoading;
+      if(typeof loadPyodide === "undefined") throw new Error("NO_PYODIDE");
+      pyodideLoading = loadPyodide({ indexURL: PYODIDE_URL })
+        .then(function(py){ pyodide = py; return py; })
+        .catch(function(err){ pyodideLoading = null; throw err; });
+      return pyodideLoading;
+    }
+
+    const FALLBACK_MSG = "Couldn't start Python here. Once this site is live on GitHub Pages the code runner works. (If you're previewing inside another app, that may be blocking it.)";
+
+    async function runUserCode(code, term){
+      term.innerHTML = "";
+      let py;
+      try{
+        py = await getPyodide();
+      }catch(e){
+        printLine(term, FALLBACK_MSG, "note");
+        return { out: "", loadFailed: true };
+      }
+      window._agInput = function(msg){ const r = window.prompt(msg || "Input:"); return r === null ? "" : r; };
+      let out = "";
+      py.setStdout({ batched: function(s){ out += s + "\n"; printLine(term, s, "out"); } });
+      py.setStderr({ batched: function(s){ printLine(term, s, "err"); } });
+      const preamble =
+        "import builtins as _b\n" +
+        "from js import _agInput as _ag\n" +
+        "_b.input = lambda *a: str(_ag(a[0] if a else \"\"))\n";
+      try{
+        await py.runPythonAsync(preamble + code);
+      }catch(e){
+        const msg = (e && e.message) ? e.message : String(e);
+        printLine(term, msg, "err");
+      }
+      return { out: out, loadFailed: false };
+    }
+
+    async function doRun(btn, code, term, status, onResult){
+      btn.disabled = true;
+      const booting = !pyodide && typeof loadPyodide !== "undefined";
+      if(booting && status) status.textContent = "Booting Python… (a few seconds the first time)";
+      let res;
+      try{
+        res = await runUserCode(code, term);
+      }finally{
+        if(status) status.textContent = "";
+        btn.disabled = false;
+      }
+      if(onResult) onResult(res);
+    }
+
+    /* ===================== answer checker ===================== */
+    function checkPass(check, out){
+      if(!check) return true;
+      const o = out;
+      const lower = o.toLowerCase();
+      if(check.producedOutput && !(o.trim().length > 0)) return false;
+      if(check.contains){
+        for(let i=0;i<check.contains.length;i++){
+          if(lower.indexOf(String(check.contains[i]).toLowerCase()) === -1) return false;
+        }
+      }
+      if(check.minLines){
+        const lines = o.trim().split("\n").filter(function(l){ return l.trim().length > 0; });
+        if(lines.length < check.minLines) return false;
+      }
+      if(check.noPlaceholder && o.indexOf("___") !== -1) return false;
+      if(check.containsDigit && !/\d/.test(o)) return false;
+      return true;
+    }
+
+    /* ===================== small utils ===================== */
+    const app = document.getElementById("app");
+
+    function escapeHtml(s){
+      return String(s)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+    }
+    function formatIdea(s){
+      return escapeHtml(s).replace(/`([^`]+)`/g, "<code>$1</code>");
+    }
+
+    function highlight(raw){
+      const esc = escapeHtml(raw);
+      // Pull string literals out first into placeholders that contain no digits
+      // and match no keyword, so the number/keyword passes below skip their
+      // contents. The guillemet delimiters never appear in the lesson code.
+      const strs = [];
+      let s = esc.replace(/(f?&quot;[\s\S]*?&quot;|f?&#39;[\s\S]*?&#39;)/g, function(m){
+        const token = "«S" + String.fromCharCode(97 + strs.length) + "»";
+        strs.push('<span class="tok-str">' + m + "</span>");
+        return token;
+      });
+      s = s.replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="tok-num">$1</span>');
+      s = s.replace(/\b(for|in|while|if|elif|else|def|return|and|or|not|True|False|None|break|continue)\b/g, '<span class="tok-kw">$1</span>');
+      s = s.replace(/\b(print|input|int|str|len|range|append)\b/g, '<span class="tok-fn">$1</span>');
+      s = s.replace(/«S([a-z])»/g, function(m, ch){ return strs[ch.charCodeAt(0) - 97]; });
+      return s;
+    }
+
+    function printLine(term, text, kind){
+      const line = document.createElement("div");
+      line.className = "term-line" + (kind === "err" ? " is-err" : kind === "note" ? " is-note" : "");
+      line.textContent = (text === "" ? " " : text);
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    function autoGrow(ta){
+      ta.style.height = "auto";
+      ta.style.height = Math.max(ta.scrollHeight, 72) + "px";
+    }
+
+    function prefersReduced(){
+      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function checkSvg(big){
+      const s = big ? 84 : 22;
+      return '<svg class="check' + (big ? " check-big" : "") + '" width="' + s + '" height="' + s +
+        '" viewBox="0 0 52 52" aria-hidden="true">' +
+        '<circle cx="26" cy="26" r="24" fill="none" stroke="var(--accent)" stroke-opacity=".35" stroke-width="2"/>' +
+        '<path class="checkpath" d="M15 27 l7 7 l15 -17" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>' +
+        "</svg>";
+    }
+
+    function footerHtml(){
+      return '<div class="appfooter"><button class="reset-link" type="button">Reset progress</button></div>';
+    }
+
+    function mount(html){
+      app.innerHTML = '<div class="screen">' + html + "</div>";
+      const reset = app.querySelectorAll(".reset-link");
+      for(let i=0;i<reset.length;i++) reset[i].onclick = resetProgress;
+      const h = app.querySelector("h1");
+      if(h){ h.setAttribute("tabindex", "-1"); try{ h.focus({ preventScroll: true }); }catch(e){ h.focus(); } }
+    }
+
+    function resetProgress(){
+      if(!window.confirm("Reset all progress and start over? This clears your saved name and journey.")) return;
+      clearState();
+      state = null;
+      pendingComplete = null;
+      renderWelcome();
+    }
+
+    /* ===================== screens ===================== */
+    function renderWelcome(){
+      mount(
+        '<header class="brand-only"><span class="brandmark">&gt;&gt;&gt;</span></header>' +
+        '<div class="welcome">' +
+          '<h1 class="display hero">Learn Python,<br>one day at a time.</h1>' +
+          '<p class="sub">Learn a single concept a day, with real code you run yourself.</p>' +
+          '<form id="welcomeForm" class="name-form">' +
+            '<label for="nameInput" class="field-label">What should I call you?</label>' +
+            '<input id="nameInput" class="text-input" type="text" autocomplete="given-name" maxlength="40" placeholder="Your name" />' +
+            '<button type="submit" class="btn btn-accent">Start learning →</button>' +
+          "</form>" +
+        "</div>"
+      );
+      const form = app.querySelector("#welcomeForm");
+      const input = app.querySelector("#nameInput");
+      form.onsubmit = function(e){
+        e.preventDefault();
+        const name = input.value.trim() || "friend";
+        state = { name: name, startDate: todayStr(), completed: [], streak: 0, lastDate: null };
+        writeState();
+        renderHome();
+      };
+      input.focus();
+    }
+
+    function buildDots(tDay){
+      let html = "";
+      for(let d=1; d<=30; d++){
+        const done = state.completed.indexOf(d) !== -1;
+        const isToday = d === tDay;
+        const clickable = done || isToday;
+        let cls = "dot";
+        if(done) cls += " done";
+        if(isToday) cls += " today";
+        const label = "Day " + d + (done ? " completed" : isToday ? " (next up)" : " locked");
+        html += '<button class="' + cls + '" type="button" data-fill="' + d + '" ' +
+          (clickable ? 'data-day="' + d + '"' : "disabled") +
+          ' aria-label="' + label + '"></button>';
+      }
+      return html;
+    }
+
+    function renderHome(){
+      const tDay = todayDay();
+      const allDone = tDay === null;
+      const pDay = prevDay();
+      const completedCount = state.completed.length;
+
+      let banner = "";
+      if(!allDone && state.lastDate === todayStr()){
+        banner = '<div class="banner">You’ve done today’s concept 🎉 Come back tomorrow — or keep exploring below.</div>';
+      }
+
+      let cardsHtml;
+      if(allDone){
+        cardsHtml =
+          '<div class="celebrate">' +
+            '<h2 class="display celebrate-h">You finished all 30 🎉</h2>' +
+            '<p class="sub">Every concept, done. Tap any dot below to revisit a lesson.</p>' +
+          "</div>";
+      }else{
+        const today = LESSONS[tDay - 1];
+        const warm = pDay ? LESSONS[pDay - 1] : null;
+        const warmHtml = warm ?
+          '<button class="choice-card warm" data-review="' + pDay + '">' +
+            '<span class="card-kicker">Warm up</span>' +
+            '<span class="card-title">Quick review of Day ' + pDay + ": " + escapeHtml(warm.title) + "</span>" +
+          "</button>" :
+          '<div class="choice-card warm disabled" aria-disabled="true">' +
+            '<span class="card-kicker">Warm up</span>' +
+            '<span class="card-title">Finish your first lesson to unlock reviews.</span>' +
+          "</div>";
+        const todayHtml =
+          '<button class="choice-card today" data-lesson="' + tDay + '">' +
+            '<span class="card-kicker">Today’s concept</span>' +
+            '<span class="card-title">' + today.emoji + " Day " + tDay + ": " + escapeHtml(today.title) + "</span>" +
+            '<span class="card-go">Start learning →</span>' +
+          "</button>";
+        cardsHtml = '<div class="cards">' + warmHtml + todayHtml + "</div>";
+      }
+
+      mount(
+        '<header class="home-head">' +
+          '<span class="brandmark">&gt;&gt;&gt;</span>' +
+          '<div class="head-right">' +
+            '<span class="streak"><span class="flame">🔥</span><span class="streak-num">' + state.streak + "</span></span>" +
+            '<span class="dayof">' + (allDone ? "All 30 done" : "Day " + tDay + " of 30") + "</span>" +
+          "</div>" +
+        "</header>" +
+        '<h1 class="greeting"><span class="prompt">&gt;&gt;&gt;</span> Hey ' + escapeHtml(state.name) + "</h1>" +
+        banner +
+        cardsHtml +
+        '<section class="journey">' +
+          '<div class="dots">' + buildDots(tDay) + "</div>" +
+          '<p class="journey-meta">' + completedCount + " done · 🔥 " + state.streak + " day streak</p>" +
+        "</section>" +
+        footerHtml()
+      );
+
+      const todayCard = app.querySelector("[data-lesson]");
+      if(todayCard) todayCard.onclick = function(){ renderLesson(parseInt(todayCard.dataset.lesson, 10)); };
+      const warmCard = app.querySelector("[data-review]");
+      if(warmCard) warmCard.onclick = function(){ renderReview(parseInt(warmCard.dataset.review, 10)); };
+      const clickDots = app.querySelectorAll(".dot[data-day]");
+      for(let i=0;i<clickDots.length;i++){
+        (function(dot){ dot.onclick = function(){ renderLesson(parseInt(dot.dataset.day, 10)); }; })(clickDots[i]);
+      }
+
+      if(pendingComplete){
+        const d = app.querySelector('.dot[data-fill="' + pendingComplete + '"]');
+        if(d) d.classList.add("just");
+        const sn = app.querySelector(".streak-num");
+        if(sn) sn.classList.add("bump");
+        pendingComplete = null;
+      }
+    }
+
+    function renderExample(slot, ex){
+      const codeHtml = '<pre class="code">' + highlight(ex.code) + "</pre>";
+      const noteHtml = ex.note ? '<p class="note">' + escapeHtml(ex.note) + "</p>" : "";
+      if(ex.runnable){
+        slot.innerHTML =
+          '<section class="example">' +
+            '<h2 class="section-h">Example</h2>' +
+            codeHtml + noteHtml +
+            '<div class="run-row"><button class="btn btn-ghost run" type="button">Run ▸</button><span class="status" aria-live="polite"></span></div>' +
+            '<div class="term" aria-live="polite"></div>' +
+          "</section>";
+        const btn = slot.querySelector(".run");
+        const status = slot.querySelector(".status");
+        const term = slot.querySelector(".term");
+        btn.onclick = function(){ doRun(btn, ex.code, term, status, null); };
+      }else{
+        slot.innerHTML =
+          '<section class="example">' +
+            '<h2 class="section-h">Example</h2>' +
+            codeHtml + noteHtml +
+          "</section>";
+      }
+    }
+
+    function renderPredict(container, P, onContinue){
+      let optsHtml = "";
+      container.innerHTML =
+        '<section class="practice">' +
+          '<h2 class="section-h">Practice</h2>' +
+          '<pre class="code">' + highlight(P.code) + "</pre>" +
+          '<p class="q">' + escapeHtml(P.question) + "</p>" +
+          '<div class="options" role="group" aria-label="Choose your answer"></div>' +
+          '<div class="explain" hidden></div>' +
+          '<button class="btn btn-ghost continue" type="button" hidden>Continue</button>' +
+        "</section>";
+      const opts = container.querySelector(".options");
+      const explain = container.querySelector(".explain");
+      const cont = container.querySelector(".continue");
+      let answered = false;
+
+      P.options.forEach(function(opt){
+        const b = document.createElement("button");
+        b.className = "opt";
+        b.type = "button";
+        b.textContent = opt;
+        b.onclick = function(){
+          if(answered) return;
+          answered = true;
+          const correct = opt === P.answer;
+          const children = opts.children;
+          for(let i=0;i<children.length;i++){
+            children[i].disabled = true;
+            if(children[i].textContent === P.answer) children[i].classList.add("opt-correct");
+          }
+          if(!correct) b.classList.add("opt-wrong");
+          explain.innerHTML = (correct ? "<strong>Right!</strong> " : "") + escapeHtml(P.explain);
+          explain.hidden = false;
+          cont.hidden = false;
+          cont.focus();
+        };
+        opts.appendChild(b);
+      });
+
+      cont.onclick = function(){ cont.disabled = true; onContinue(); };
+    }
+
+    function renderRun(container, R, onSuccess){
+      container.innerHTML =
+        '<section class="practice">' +
+          '<h2 class="section-h">Practice</h2>' +
+          '<p class="prompt-text">' + escapeHtml(R.prompt) + "</p>" +
+          '<div class="editor-wrap"><textarea class="editor" spellcheck="false" autocapitalize="off" autocorrect="off" autocomplete="off" aria-label="Code editor"></textarea></div>' +
+          '<div class="run-row"><button class="btn btn-accent run" type="button">Run ▸</button><span class="status" aria-live="polite"></span></div>' +
+          '<div class="term" aria-live="polite"></div>' +
+          '<div class="success" hidden></div>' +
+        "</section>";
+      const ta = container.querySelector(".editor");
+      ta.value = R.starter;
+      autoGrow(ta);
+      ta.addEventListener("input", function(){ autoGrow(ta); });
+      const btn = container.querySelector(".run");
+      const status = container.querySelector(".status");
+      const term = container.querySelector(".term");
+      const success = container.querySelector(".success");
+      let passed = false;
+
+      btn.onclick = function(){
+        doRun(btn, ta.value, term, status, function(res){
+          if(res.loadFailed) return;
+          const ok = checkPass(R.check, res.out);
+          if(ok && !passed){
+            passed = true;
+            success.innerHTML = checkSvg(false) + "<span>Nice — that’s it!</span>";
+            success.hidden = false;
+            onSuccess();
+          }else if(!ok){
+            printLine(term, R.hint, "note");
+          }
+        });
+      };
+    }
+
+    function renderLesson(day){
+      const L = LESSONS[day - 1];
+      mount(
+        '<header class="bar"><button class="iconbtn back" type="button" aria-label="Back to home">←</button></header>' +
+        '<p class="eyebrow">Day ' + L.day + "</p>" +
+        '<h1 class="lesson-title">' + L.emoji + " " + escapeHtml(L.title) + "</h1>" +
+        '<div class="idea">' + formatIdea(L.idea) + "</div>" +
+        '<div id="exampleSlot"></div>' +
+        '<div id="practiceSlot"></div>' +
+        '<footer class="lesson-footer"><button class="btn btn-accent" id="markComplete" type="button" disabled>Mark complete ✓</button></footer>' +
+        footerHtml()
+      );
+
+      app.querySelector(".back").onclick = renderHome;
+
+      if(L.example) renderExample(app.querySelector("#exampleSlot"), L.example);
+
+      const markBtn = app.querySelector("#markComplete");
+      const enable = function(){ markBtn.disabled = false; markBtn.focus(); };
+      markBtn.onclick = function(){ onMarkComplete(day); };
+
+      const pslot = app.querySelector("#practiceSlot");
+      const p = L.practice;
+      if(p.type === "predict"){
+        renderPredict(pslot, p.predict, enable);
+      }else if(p.type === "run"){
+        renderRun(pslot, p.run, enable);
+      }else if(p.type === "both"){
+        renderPredict(pslot, p.predict, function(){
+          const runWrap = document.createElement("div");
+          pslot.appendChild(runWrap);
+          renderRun(runWrap, p.run, enable);
+          runWrap.querySelector(".prompt-text").scrollIntoView({ behavior: prefersReduced() ? "auto" : "smooth", block: "nearest" });
+        });
+      }
+    }
+
+    function renderReview(day){
+      const L = LESSONS[day - 1];
+      mount(
+        '<header class="bar"><button class="iconbtn back" type="button" aria-label="Back to home">←</button></header>' +
+        '<p class="eyebrow">Warm up · Day ' + L.day + "</p>" +
+        '<h1 class="lesson-title">' + L.emoji + " " + escapeHtml(L.title) + "</h1>" +
+        '<div class="review-card">' +
+          '<p class="review-text">' + escapeHtml(L.review) + "</p>" +
+          '<div id="exampleSlot"></div>' +
+        "</div>" +
+        '<button class="btn btn-accent" id="gotIt" type="button">Got it →</button>' +
+        footerHtml()
+      );
+      app.querySelector(".back").onclick = renderHome;
+      if(L.example) renderExample(app.querySelector("#exampleSlot"), L.example);
+      app.querySelector("#gotIt").onclick = renderHome;
+    }
+
+    function showCompletionSplash(cb){
+      const o = document.createElement("div");
+      o.className = "splash";
+      o.innerHTML = '<div class="splash-inner">' + checkSvg(true) + "<p>Lesson complete</p></div>";
+      document.body.appendChild(o);
+      setTimeout(function(){ o.remove(); cb(); }, 850);
+    }
+
+    function onMarkComplete(day){
+      const wasNew = state.completed.indexOf(day) === -1;
+      completeDay(day);
+      if(!wasNew){ renderHome(); return; }
+      pendingComplete = day;
+      if(prefersReduced()){ renderHome(); return; }
+      showCompletionSplash(function(){ renderHome(); });
+    }
+
+    /* ===================== init ===================== */
+    function start(){
+      state = readState();
+      if(state && state.name) renderHome();
+      else renderWelcome();
+    }
+    start();
+  })();
+  </script>
+</body>
+</html>
